@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Amazon India - React</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+body{background:#e3e6e6;overflow-x:hidden}
+.navbar{width:100%;background:#131921;color:white;display:flex;align-items:center;padding:8px 16px;gap:12px;flex-wrap:nowrap;position:sticky;top:0;z-index:100}
+.nav-logo img{width:110px;height:42px;object-fit:contain}
+.border{border:1px solid transparent;padding:6px 8px;cursor:pointer;border-radius:3px;transition:.2s;flex-shrink:0}
+.border:hover{border-color:white}
+.nav-location{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.nav-location .loc-top{font-size:11px;color:#ccc}
+.nav-location .loc-bot{font-size:13px;font-weight:700}
+.nav-search{display:flex;flex:1;max-width:700px;height:42px;border-radius:5px;overflow:hidden;background:white}
+.nav-search:hover{outline:2px solid #f3a847}
+.nav-search select{width:55px;border:none;background:#e8e8e8;padding:0 4px;font-size:13px;cursor:pointer;border-right:1px solid #ccc}
+.nav-search input{flex:1;border:none;padding:0 10px;font-size:16px;outline:none}
+.nav-search button{width:52px;border:none;background:#febd69;cursor:pointer;font-size:20px;transition:.2s}
+.nav-search button:hover{background:#f3a847}
+.nav-text p{font-size:11px;color:#ccc;white-space:nowrap}
+.nav-text h4{font-size:13px;font-weight:700;white-space:nowrap}
+.nav-cart{display:flex;align-items:center;gap:4px;font-size:14px;font-weight:700;white-space:nowrap;cursor:pointer;border:1px solid transparent;padding:6px 8px;border-radius:3px;transition:.2s}
+.nav-cart:hover{border-color:white}
+.nav-cart i{font-size:32px}
+.nav-cart .count{color:#f08804;font-size:18px;font-weight:700}
+.panel{width:100%;background:#232f3e;color:white;display:flex;align-items:center;gap:18px;padding:0 14px;overflow-x:auto;height:42px}
+.panel::-webkit-scrollbar{display:none}
+.panel-all{display:flex;align-items:center;gap:6px;font-size:16px;font-weight:700;cursor:pointer;white-space:nowrap;padding:6px 8px;border:1px solid transparent;border-radius:3px;transition:.2s}
+.panel-all:hover{border-color:white}
+.panel-link{color:white;text-decoration:none;font-size:14px;white-space:nowrap;padding:4px 2px;border-bottom:2px solid transparent;transition:.2s;cursor:pointer}
+.panel-link:hover{border-bottom-color:white}
+.hero{width:100%;overflow:hidden;position:relative;max-height:500px}
+.hero img{width:100%;height:auto;object-fit:cover;display:block;transition:opacity .6s}
+.hero-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.35);color:white;border:none;font-size:28px;padding:12px 10px;cursor:pointer;z-index:2;border-radius:3px;transition:.2s}
+.hero-btn:hover{background:rgba(0,0,0,.6)}
+.hero-btn.left{left:8px}
+.hero-btn.right{right:8px}
+.hero-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:7px}
+.hero-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer;transition:.2s}
+.hero-dot.active{background:white}
+.product-section{padding:18px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:18px}
+.card{background:white;padding:15px;border-radius:8px;transition:.25s;overflow:hidden;cursor:pointer}
+.card:hover{transform:translateY(-4px);box-shadow:0 6px 20px rgba(0,0,0,.18)}
+.card h2{margin-bottom:12px;font-size:17px;color:#111}
+.card h3{margin-bottom:12px;font-size:15px;color:#111}
+.card img{width:100%;height:auto;object-fit:cover;transition:.25s}
+.box1{display:flex;gap:8px;justify-content:space-between;margin-bottom:8px}
+.box1 img{width:48%;max-width:160px;border-radius:4px}
+.box1 img:hover{transform:scale(1.05)}
+.wide-row{background:white;padding:15px;border-radius:8px;margin-bottom:18px}
+.wide-row h3{margin-bottom:12px;font-size:15px;color:#111}
+.scroll-row{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px}
+.scroll-row::-webkit-scrollbar{height:6px}
+.scroll-row::-webkit-scrollbar-thumb{background:#bbb;border-radius:10px}
+.scroll-row img{width:170px;flex-shrink:0;border-radius:4px;transition:.25s;cursor:pointer}
+.scroll-row img:hover{transform:scale(1.06)}
+.sign-in-btn{background:#ffce12;border:none;border-radius:8px;padding:10px 24px;font-size:15px;font-weight:600;cursor:pointer;width:80%;margin:16px auto;display:block;transition:.2s}
+.sign-in-btn:hover{background:#f0bf00}
+.sign-in-product{display:flex;align-items:flex-start;gap:10px;padding:8px 0}
+.sign-in-product img{width:90px;border-radius:4px;flex-shrink:0}
+.sign-in-product p{font-size:13px;color:#333;line-height:1.4}
+.back-top{background:#37475a;color:white;text-align:center;padding:13px;cursor:pointer;font-size:14px;transition:.2s}
+.back-top:hover{background:#485769}
+.footer{background:#232f3e;color:white;padding:36px 28px}
+.footer-links{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+.footer-links h4{margin-bottom:10px;font-size:15px}
+.footer-links a{display:block;color:#ddd;text-decoration:none;margin-bottom:7px;font-size:13px;transition:.2s}
+.footer-links a:hover{color:white;text-decoration:underline}
+.footer hr{margin:28px 0;border:none;border-top:.5px solid #3a4553}
+.footer-lang{display:flex;justify-content:center;align-items:center;gap:14px;flex-wrap:wrap}
+.footer-lang img{width:100px;height:38px;object-fit:contain}
+.footer-lang button{background:transparent;border:1px solid #848688;color:white;padding:7px 12px;cursor:pointer;border-radius:3px;font-size:13px;transition:.2s}
+.footer-lang button:hover{border-color:white}
+.footer-bottom{background:#131a22;color:#ddd;text-align:center;padding:28px 18px}
+.bottom-links{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:18px}
+.bottom-links h5{color:white;margin-bottom:4px;font-size:13px}
+.bottom-links p{font-size:12px;color:#aaa}
+.toast{position:fixed;bottom:28px;right:28px;background:#232f3e;color:white;padding:13px 22px;border-radius:8px;font-size:14px;z-index:999;border-left:4px solid #f08804;box-shadow:0 4px 16px rgba(0,0,0,.3);animation:slideIn .3s ease}
+@keyframes slideIn{from{transform:translateX(100px);opacity:0}to{transform:translateX(0);opacity:1}}
+@media(max-width:1100px){.grid-4{grid-template-columns:repeat(2,1fr)}.footer-links{grid-template-columns:repeat(2,1fr)}.bottom-links{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.nav-location{display:none}.nav-search{max-width:100%;order:3;flex:1 0 100%}.navbar{flex-wrap:wrap}.grid-4{grid-template-columns:1fr}.footer-links{grid-template-columns:1fr;text-align:center}.bottom-links{grid-template-columns:1fr}.scroll-row img{width:130px}}
+@media(max-width:480px){.nav-logo img{width:90px}.nav-search button{width:44px}.nav-cart i{font-size:26px}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useCallback } = React;
+
+const HERO_IMAGES = [
+  "https://images-eu.ssl-images-amazon.com/images/G/31/img23/Consumables/X-GL/Feb5/PC_Hero_1_3000._CB582457311_.jpg",
+  "https://images-eu.ssl-images-amazon.com/images/G/31/img22/Unrec/TallHero_3000X1200_Unrec._CB593464763_.jpg",
+  "https://images-eu.ssl-images-amazon.com/images/G/31/INSLGW/af_pc_2x._CB792409181_.jpg",
+];
+
+const PANEL_LINKS = ["Fresh","MX Player","Sell","Bestsellers","Today's Deals","Mobiles","Prime","New Releases","Customer Service","Amazon Pay","Electronics","Fashion","Home & Kitchen"];
+
+const CARD_DATA = [
+  { id:1, title:"Continue shopping deals", type:"box", images:["https://m.media-amazon.com/images/I/81OxirWitAL._AC_SY145_.jpg","https://m.media-amazon.com/images/I/612FuICrCCL._AC_SY145_.jpg","https://m.media-amazon.com/images/I/81OxirWitAL._AC_SY145_.jpg","https://m.media-amazon.com/images/I/61yp3ndG1JL._AC_SY145_.jpg"] },
+  { id:2, title:"Revamp your home in style", type:"box", images:["https://images-eu.ssl-images-amazon.com/images/G/31/IMG20/Home/2024/Gateway/BTFGW/PCQC/New/1x/final/186x116_Home_furnishings_2._SY116_CB555624324_.jpg","https://images-eu.ssl-images-amazon.com/images/G/31/IMG20/Home/2024/Gateway/BTFGW/PCQC/New/1x/final/186x116_Home_decor_1._SY116_CB555624324_.jpg","https://images-eu.ssl-images-amazon.com/images/G/31/IMG20/Home/2024/Gateway/BTFGW/PCQC/New/1x/final/186x116_Home_decor_1._SY116_CB555624324_.jpg","https://images-eu.ssl-images-amazon.com/images/G/31/IMG20/Home/2024/Gateway/BTFGW/PCQC/New/1x/final/186x116_Home_lighting_2._SY116_CB555624324_.jpg"] },
+  { id:3, title:"Bulk order discounts + Up to 18% GST savings", type:"box", images:["https://images-eu.ssl-images-amazon.com/images/G/31/AmazonBusiness/img25/nov/bau/ain/gw/Laptops_186_116_10._SY116_CB777673831_.jpg","https://images-eu.ssl-images-amazon.com/images/G/31/AmazonBusiness/img25/nov/bau/ain/gw/KitchenAppliances_186_116_10._SY116_CB777673831_.jpg","https://images-eu.ssl-images-amazon.com/images/G/31/AmazonBusiness/img25/nov/bau/ain/gw/OfficeChairs_186_116_10._SY116_CB777673831_.jpg","https://images-eu.ssl-images-amazon.com/images/G/31/AmazonBusiness/img25/dec/bau/ain/gw/ABdelivery_186_116._SY116_CB776314701_.jpg"] },
+  { id:4, title:"Sign in for your best experience", type:"signin" },
+  { id:5, title:"Pick up where you left off", type:"single", img:"https://m.media-amazon.com/images/I/71Mcqwn-AJL._AC_SY175_.jpg", desc:"Vasukie Divided Fridge Storage Boxes With 4 Serving Veggie Tray with Lid and Handle, Fridge Organizer with Removable 4 Compartment" },
+  { id:6, title:"Best Sellers in Home & Kitchen", type:"duo", images:["https://m.media-amazon.com/images/I/81Pm1MEvURL._AC_SY170_.jpg","https://m.media-amazon.com/images/I/71QfC+NELFL._AC_SY170_.jpg"] },
+  { id:7, title:"Up to 60% off | Kitchen products", type:"duo", images:["https://m.media-amazon.com/images/I/71MXSFRW87L._AC_SY195_.jpg","https://m.media-amazon.com/images/I/71HzHSEjFlL._AC_SY195_.jpg"], desc:"Aquaminder Smart Water Bottle Glows & Beeps to Remind You to Drink More 770 ml" },
+  { id:8, title:"Starting ₹199 | Toys", type:"duo", images:["https://m.media-amazon.com/images/I/711Rh9MsKvL._AC_SY195_.jpg","https://m.media-amazon.com/images/I/61vERbb2LXL._AC_SY195_.jpg"], desc:"BlackZone Kids Friction Powered DTX Car Monster Telescopic Toys for Boys Girls" },
+];
+
+const CLOTHING_IMGS = ["https://m.media-amazon.com/images/I/619xMvtqClL._AC_SY200_.jpg","https://m.media-amazon.com/images/I/71nW6Xh7QnL._AC_SY200_.jpg","https://m.media-amazon.com/images/I/71OAvZWN00L._AC_SY200_.jpg","https://m.media-amazon.com/images/I/81L0Y0-UPGL._AC_SY200_.jpg","https://m.media-amazon.com/images/I/5160oX6raFL._AC_SY200_.jpg","https://m.media-amazon.com/images/I/71I53evweVL._AC_SY200_.jpg","https://m.media-amazon.com/images/I/61c+uZmItyL._AC_SY200_.jpg","https://m.media-amazon.com/images/I/61l0MoyijTL._AC_SY200_.jpg","https://m.media-amazon.com/images/I/71gLrwTC-lL._AC_SY200_.jpg","https://m.media-amazon.com/images/I/91hIyGIagmL._AC_SY200_.jpg","https://m.media-amazon.com/images/I/51sSJUx8mwL._AC_SY200_.jpg"];
+const LIVE_IMGS = ["https://m.media-amazon.com/images/I/81kHmhQiK6L._SX160_QL100_AC_SCLZZZZZZZ_.jpg","https://m.media-amazon.com/images/I/71Mu0yxKqmS._SX160_QL100_AC_SCLZZZZZZZ_.jpg","https://m.media-amazon.com/images/I/71mz1-qcSBL._SX160_QL100_AC_SCLZZZZZZZ_.jpg","https://m.media-amazon.com/images/I/81Z7l8RONUL._SX160_QL100_AC_SCLZZZZZZZ_.jpg"];
+
+const GRID2_CARDS = [
+  {id:9,title:"Up to 70% off | Kitchen products",images:["https://m.media-amazon.com/images/I/71leLgzKqDL._AC_SY195_.jpg","https://m.media-amazon.com/images/I/51X0Rj62IvL._AC_SY195_.jpg","https://m.media-amazon.com/images/I/61XKdY7zAVL._AC_SY195_.jpg"]},
+  {id:10,title:"Up to 60% off | Best offers",images:["https://m.media-amazon.com/images/I/61-6yDuvBxL._AC_SY195_.jpg","https://m.media-amazon.com/images/I/61-6yDuvBxL._AC_SY195_.jpg","https://m.media-amazon.com/images/I/81S3rlPPptL._AC_SY195_.jpg"]},
+  {id:11,title:"Customers' Most-Loved",images:["https://m.media-amazon.com/images/I/51oIwAfzsmL._AC_SY145_.jpg","https://m.media-amazon.com/images/I/81wcpowlmLL._AC_SY145_.jpg","https://m.media-amazon.com/images/I/514anPl6pIL._AC_SY145_.jpg","https://m.media-amazon.com/images/I/41lGEdOBu0L._AC_SY145_.jpg"]},
+  {id:12,title:"Up to 60% off | Trending from Emerging Business",images:["https://m.media-amazon.com/images/I/61JeMF3xF-L._AC_SY195_.jpg","https://m.media-amazon.com/images/I/712oqGerynL._AC_SY195_.jpg"]},
+];
+
+/* ========== TOAST ========== */
+function Toast({ onDone }) {
+  useEffect(() => { const t = setTimeout(onDone, 2000); return () => clearTimeout(t); }, []);
+  return <div className="toast">🛒 Item added to cart!</div>;
+}
+
+/* ========== HERO SLIDER ========== */
+function HeroSlider() {
+  const [cur, setCur] = useState(0);
+  const next = useCallback(() => setCur(c => (c+1) % HERO_IMAGES.length), []);
+  const prev = useCallback(() => setCur(c => (c-1+HERO_IMAGES.length) % HERO_IMAGES.length), []);
+  useEffect(() => { const t = setInterval(next, 3200); return () => clearInterval(t); }, [next]);
+  return (
+    <div className="hero">
+      <img src={HERO_IMAGES[cur]} alt="hero banner" key={cur} />
+      <button className="hero-btn left" onClick={prev}><i className="fa fa-chevron-left"/></button>
+      <button className="hero-btn right" onClick={next}><i className="fa fa-chevron-right"/></button>
+      <div className="hero-dots">
+        {HERO_IMAGES.map((_,i) => (
+          <div key={i} className={"hero-dot"+(i===cur?" active":"")} onClick={()=>setCur(i)}/>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ========== PRODUCT CARD ========== */
+function Card({ data, onAddToCart }) {
+  if (data.type === "box") return (
+    <div className="card">
+      <h2>{data.title}</h2>
+      <div className="box1">
+        <img src={data.images[0]} alt="" onClick={()=>onAddToCart()}/>
+        <img src={data.images[1]} alt="" onClick={()=>onAddToCart()}/>
+      </div>
+      <div className="box1">
+        <img src={data.images[2]} alt="" onClick={()=>onAddToCart()}/>
+        <img src={data.images[3]} alt="" onClick={()=>onAddToCart()}/>
+      </div>
+    </div>
+  );
+  if (data.type === "signin") return (
+    <div className="card">
+      <h2 style={{fontSize:"16px",marginBottom:"10px"}}>Sign in for your best experience</h2>
+      <button className="sign-in-btn" onClick={()=>alert("Login Feature Coming Soon!")}>Sign in securely</button>
+      <div className="sign-in-product">
+        <img src="https://m.media-amazon.com/images/I/61vPHa1W-6L._AC_PT0_BL0_SX300_SY325_.jpg" alt=""/>
+        <p>U.S. POLO ASSN. Men's Polyester Standard Length Trench Coat — Recommended for you</p>
+      </div>
+    </div>
+  );
+  if (data.type === "single") return (
+    <div className="card" onClick={()=>onAddToCart()}>
+      <h3>{data.title}</h3>
+      <img src={data.img} alt="" style={{maxHeight:"160px",objectFit:"contain",margin:"8px auto",display:"block"}}/>
+      <p style={{fontSize:"12px",color:"#666",marginTop:"8px"}}>{data.desc}</p>
+    </div>
+  );
+  if (data.type === "duo") return (
+    <div className="card">
+      <h3>{data.title}</h3>
+      <div style={{display:"flex",justifyContent:"space-evenly",gap:"8px",marginBottom:"8px"}}>
+        {data.images.map((img,i) => <img key={i} src={img} alt="" style={{width:"48%",borderRadius:"4px"}} onClick={()=>onAddToCart()}/>)}
+      </div>
+      {data.desc && <p style={{fontSize:"12px",color:"#666"}}>{data.desc}</p>}
+    </div>
+  );
+  return null;
+}
+
+/* ========== MAIN APP ========== */
+function App() {
+  const [cart, setCart] = useState(0);
+  const [search, setSearch] = useState("");
+  const [showToast, setShowToast] = useState(false);
+
+  const addToCart = useCallback(() => {
+    setCart(c => c + 1);
+    setShowToast(true);
+  }, []);
+
+  const filteredCards = CARD_DATA.filter(c =>
+    !search ||
+    c.title.toLowerCase().includes(search.toLowerCase()) ||
+    (c.desc||"").toLowerCase().includes(search.toLowerCase())
+  );
+
+  const filteredGrid2 = GRID2_CARDS.filter(c =>
+    !search || c.title.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const totalResults = filteredCards.length + filteredGrid2.length;
+
+  return (
+    <div>
+      {showToast && <Toast onDone={()=>setShowToast(false)}/>}
+
+      {/* ===== NAVBAR ===== */}
+      <nav className="navbar">
+        <div className="nav-logo border">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon"/>
+        </div>
+        <div className="nav-location border">
+          <i className="fa fa-map-marker" style={{fontSize:"22px"}}/>
+          <div>
+            <div className="loc-top">Delivering to Ghaziabad</div>
+            <div className="loc-bot">Update location</div>
+          </div>
+        </div>
+        <div className="nav-search">
+          <select>
+            <option>All</option>
+            <option>Electronics</option>
+            <option>Fashion</option>
+            <option>Home</option>
+            <option>Toys</option>
+            <option>Books</option>
+          </select>
+          <input
+            type="text"
+            placeholder="Search Amazon.in"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
+          <button><i className="fa fa-search"/></button>
+        </div>
+        <div className="border nav-text">
+          <p>🇮🇳 EN <i className="fa fa-caret-down"/></p>
+        </div>
+        <div className="border nav-text" onClick={()=>alert("Login Feature Coming Soon!")}>
+          <p>Hello, sign in</p>
+          <h4>Account &amp; Lists <i className="fa fa-caret-down"/></h4>
+        </div>
+        <div className="border nav-text">
+          <p>Returns</p>
+          <h4>&amp; Orders</h4>
+        </div>
+        <div className="nav-cart border">
+          <i className="fa fa-shopping-cart"/>
+          <span className="count">{cart}</span>
+          Cart
+        </div>
+      </nav>
+
+      {/* ===== PANEL ===== */}
+      <div className="panel">
+        <div className="panel-all"><i className="fa fa-bars"/> All</div>
+        {PANEL_LINKS.map(l => <span key={l} className="panel-link">{l}</span>)}
+      </div>
+
+      {/* ===== HERO SLIDER ===== */}
+      <HeroSlider/>
+
+      {/* ===== PRODUCTS ===== */}
+      <section className="product-section">
+        {search && (
+          <div style={{marginBottom:"12px",fontSize:"14px",color:"#555"}}>
+            {totalResults > 0
+              ? `Showing ${totalResults} results for "${search}"`
+              : `No results found for "${search}"`}
+          </div>
+        )}
+
+        {filteredCards.length > 0 && (
+          <div className="grid-4">
+            {filteredCards.map(c => <Card key={c.id} data={c} onAddToCart={addToCart}/>)}
+          </div>
+        )}
+
+        {!search && (
+          <>
+            <div className="wide-row">
+              <h3>Best Sellers in Clothing &amp; Accessories</h3>
+              <div className="scroll-row">
+                {CLOTHING_IMGS.map((img,i) => <img key={i} src={img} alt="" onClick={addToCart}/>)}
+              </div>
+            </div>
+            <div className="wide-row">
+              <h3>Amazon LIVE – Watch, Chat &amp; Shop</h3>
+              <div className="scroll-row">
+                {LIVE_IMGS.map((img,i) => <img key={i} src={img} alt=""/>)}
+              </div>
+            </div>
+          </>
+        )}
+
+        {filteredGrid2.length > 0 && (
+          <div className="grid-4">
+            {filteredGrid2.map(c => (
+              <div key={c.id} className="card">
+                <h3>{c.title}</h3>
+                {c.images.map((img,i) => (
+                  <img key={i} src={img} alt="" style={{marginBottom:"6px",borderRadius:"4px"}} onClick={addToCart}/>
+                ))}
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* ===== BACK TO TOP ===== */}
+      <div className="back-top" onClick={()=>window.scrollTo({top:0,behavior:"smooth"})}>
+        ▲ Back to top
+      </div>
+
+      {/* ===== FOOTER ===== */}
+      <footer className="footer">
+        <div className="footer-links">
+          <div>
+            <h4>Get to Know Us</h4>
+            <a href="#">About Amazon</a>
+            <a href="#">Careers</a>
+            <a href="#">Press Releases</a>
+            <a href="#">Amazon Science</a>
+          </div>
+          <div>
+            <h4>Connect with Us</h4>
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">Instagram</a>
+          </div>
+          <div>
+            <h4>Make Money with Us</h4>
+            <a href="#">Sell on Amazon</a>
+            <a href="#">Become an Affiliate</a>
+            <a href="#">Fulfilment by Amazon</a>
+            <a href="#">Advertise Your Products</a>
+            <a href="#">Amazon Pay on Merchants</a>
+          </div>
+          <div>
+            <h4>Let Us Help You</h4>
+            <a href="#">Your Account</a>
+            <a href="#">Returns Centre</a>
+            <a href="#">100% Purchase Protection</a>
+            <a href="#">Amazon App Download</a>
+            <a href="#">Help</a>
+          </div>
+        </div>
+        <hr/>
+        <div className="footer-lang">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon" style={{filter:"brightness(0) invert(1)"}}/>
+          <button>🌐 English</button>
+          <button>🇮🇳 India</button>
+        </div>
+      </footer>
+
+      {/* ===== FOOTER BOTTOM ===== */}
+      <div className="footer-bottom">
+        <div className="bottom-links">
+          <div><h5>AbeBooks</h5><p>Books, art &amp; collectibles</p></div>
+          <div><h5>Amazon Web Services</h5><p>Scalable Cloud Computing Services</p></div>
+          <div><h5>Audible</h5><p>Download Audio Books</p></div>
+          <div><h5>IMDb</h5><p>Movies, TV &amp; Celebrities</p></div>
+        </div>
+        <p style={{fontSize:"12px",color:"#aaa"}}>
+          Conditions of Use &amp; Sale · Privacy Notice · Interest-Based Ads<br/>
+          © 1996-2025, Amazon.com, Inc. or its affiliates
+        </p>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
