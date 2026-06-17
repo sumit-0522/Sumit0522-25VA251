@@ -1,0 +1,7 @@
+button {
+  background-color: aqua;
+  color: red;
+  border: 5px solid green;
+  width: 200px;
+  margin: 30px auto;
+}
